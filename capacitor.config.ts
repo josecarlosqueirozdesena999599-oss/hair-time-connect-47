@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.a7f147b1995341cca4654f5d6f6a458d',
+  appId: 'com.barberapp.agendamentos',
   appName: 'BARBER TESTE',
   webDir: 'dist',
   server: {
@@ -12,7 +12,13 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 2000,
       backgroundColor: "#1a1a1a",
-      showSpinner: false
+      showSpinner: false,
+      splashFullScreen: true,
+      splashImmersive: true
+    },
+    StatusBar: {
+      style: 'DARK',
+      backgroundColor: '#1a1a1a'
     }
   }
 };
