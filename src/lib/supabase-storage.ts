@@ -275,6 +275,14 @@ export const generateTimeSlots = async (date: string) => {
   const settings = await getSettings();
   if (!settings) return [];
   
+  // Buscar todos os agendamentos do dia de uma vez
+  const { data: appointments } = await supabase
+    .from('appointments')
+    .select('appointment_time')
+    .eq('appointment_date', date);
+  
+  const bookedTimes = new Set(appointments?.map(apt => apt.appointment_time) || []);
+  
   const slots = [];
   const startHour = parseInt(settings.working_hours_start.split(':')[0]);
   const endHour = parseInt(settings.working_hours_end.split(':')[0]);
@@ -283,7 +291,7 @@ export const generateTimeSlots = async (date: string) => {
     for (let i = 0; i < settings.slots_per_hour; i++) {
       const minutes = i * (60 / settings.slots_per_hour);
       const time = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      const available = await isSlotAvailable(date, time);
+      const available = !bookedTimes.has(time);
       
       slots.push({
         id: `${date}-${time}`,

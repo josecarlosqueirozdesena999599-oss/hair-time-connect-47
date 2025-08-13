@@ -29,6 +29,38 @@
 
     <!-- Manifest for PWA -->
     <link rel="manifest" href="/manifest.json">
+    
+    <!-- PWA Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+              
+              // Mostrar prompt de instalação após 3 segundos
+              setTimeout(() => {
+                if (window.deferredPrompt) {
+                  window.deferredPrompt.prompt();
+                  window.deferredPrompt.userChoice.then((choiceResult) => {
+                    console.log('Install prompt result:', choiceResult.outcome);
+                    window.deferredPrompt = null;
+                  });
+                }
+              }, 3000);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+        
+        // Capturar o evento de instalação PWA
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          window.deferredPrompt = e;
+        });
+      }
+    </script>
 
     <meta property="og:title" content="BARBER TESTE - Sistema de Agendamentos" />
     <meta property="og:description" content="Sistema profissional de agendamentos para barbearias" />

@@ -272,15 +272,22 @@ const Index = () => {
                 </h2>
               </div>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                {availableSlots.map((slot) => (
-                  <TimeSlotCard
-                    key={slot.id}
-                    time={slot.time}
-                    available={slot.available}
-                    selected={selectedTime === slot.time}
-                    onSelect={() => setSelectedTime(slot.time)}
-                  />
-                ))}
+                {availableSlots.length === 0 && selectedDate ? (
+                  <div className="col-span-full text-center py-8">
+                    <Clock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-muted-foreground">Carregando horários...</p>
+                  </div>
+                ) : (
+                  availableSlots.map((slot) => (
+                    <TimeSlotCard
+                      key={slot.id}
+                      time={slot.time}
+                      available={slot.available}
+                      selected={selectedTime === slot.time}
+                      onSelect={() => setSelectedTime(slot.time)}
+                    />
+                  ))
+                )}
               </div>
             </Card>
           )}
